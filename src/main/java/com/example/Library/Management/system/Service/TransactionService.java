@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -125,5 +126,14 @@ public class TransactionService {
         transactionRepository.save(newTransaction);
 
         return "Book has been returned";
+    }
+
+    public Long getTotalRevenueCollectedByLibrary() {
+        List<Transaction> transactionList = transactionRepository.findAll();
+        Long revenue = 0L;
+        for(Transaction transaction : transactionList){
+            revenue += transaction.getFine();
+        }
+        return revenue;
     }
 }

@@ -4,6 +4,7 @@ import com.example.Library.Management.system.Entities.Book;
 import com.example.Library.Management.system.Entities.Genre;
 import com.example.Library.Management.system.Entities.LibraryCard;
 import com.example.Library.Management.system.Service.BookService;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,29 @@ public class BookController {
 
 
     @GetMapping("/get-book-by-genre")
-    public List<String> getBookByGenre(@RequestParam("genre")Genre genre){
-        return bookService.getBookByGenre(genre);
+    public ResponseEntity getBookByGenre(@RequestParam("genre")Genre genre){
+        List<String> books = bookService.getBookByGenre(genre);
+        return new ResponseEntity(books,HttpStatus.OK);
     }
+
+
+    @GetMapping("/get-most-issued-book")
+    public ResponseEntity getMostIssuedBook(){
+        try {
+            List<String> books = bookService.getMostIssuedBook();
+            return new ResponseEntity(books, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/delete/{bookId}")
+    public ResponseEntity deleteBook(@PathVariable("bookId") Integer bookId){
+        try{
+            String result = bookService.deleteBook(bookId);
+            return new ResponseEntity(result,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

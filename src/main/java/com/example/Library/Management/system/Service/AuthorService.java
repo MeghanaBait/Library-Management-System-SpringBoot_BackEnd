@@ -2,6 +2,7 @@ package com.example.Library.Management.system.Service;
 
 import com.example.Library.Management.system.Entities.Author;
 import com.example.Library.Management.system.Entities.Book;
+import com.example.Library.Management.system.Exceptions.AuthorNotFoundException;
 import com.example.Library.Management.system.Repository.AuthorRepository;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,24 @@ public class AuthorService {
             bookNames.add(book.getBookName());
         }
         return bookNames;
+    }
+
+    public Long getAverageRatingOfAllBookWrittenByAuthor(Integer authorId) throws Exception {
+        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+
+        if(!optionalAuthor.isPresent()){
+            throw new AuthorNotFoundException("Invalid author Id");
+        }
+
+        Author author = optionalAuthor.get();
+
+        List<Book> bookList = author.getBookList();
+        long totalRating = 0;
+        for(Book book : bookList){
+            totalRating += book.getRating();
+        }
+
+        long avgRating = totalRating / bookList.size();
+        return avgRating;
     }
 }

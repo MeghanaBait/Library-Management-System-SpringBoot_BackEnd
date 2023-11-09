@@ -1,17 +1,16 @@
 package com.example.Library.Management.system.Service;
 
-import com.example.Library.Management.system.Entities.Author;
-import com.example.Library.Management.system.Entities.Book;
-import com.example.Library.Management.system.Entities.Genre;
+import com.example.Library.Management.system.Entities.*;
 import com.example.Library.Management.system.Exceptions.AuthorNotFoundException;
+import com.example.Library.Management.system.Exceptions.BookNotFoundException;
+import com.example.Library.Management.system.Exceptions.NoBooksIssued;
 import com.example.Library.Management.system.Repository.AuthorRepository;
 import com.example.Library.Management.system.Repository.BookRepository;
+import com.example.Library.Management.system.Repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -20,6 +19,9 @@ public class BookService {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public String addBook(Book book,Integer authorId) throws AuthorNotFoundException {
       //check whether author with authorID is present or not
@@ -50,4 +52,45 @@ public class BookService {
         return bookNames;
     }
 
+    public String deleteBook(Integer bookId) throws Exception {
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if(!optionalBook.isPresent()){
+            throw new BookNotFoundException("Book Id is invalid");
+        }
+
+        bookRepository.deleteById(bookId);
+        return "Book has been deleted successfully";
+    }
+
+    public List<String> getMostIssuedBook() throws NoBooksIssued {
+
+        List<String> mostIssuedBooks = new ArrayList<>();
+
+        List<Transaction> transactionList = transactionRepository.findAll();
+
+        Map<String, Integer> issuedBookCountMap = new HashMap<>();
+
+        for(Transaction transaction : transactionList){
+            if(transaction.getTransactionStatus().equals(TransactionStatus.ISSUED)){
+                String bookName = transaction.getBook().getBookName();
+                issuedBookCountMap.put(bookName,issuedBookCountMap.getOrDefault(bookName,0)+1);
+            }
+        }
+
+        int maxIssue = 0;
+        for(Integer value :issuedBookCountMap.values()){
+            maxIssue = Math.max(maxIssue,value);
+        }
+
+        for(String bookName : issuedBookCountMap.keySet()){
+            if(issuedBookCountMap.get(bookName) == maxIssue){
+                mostIssuedBooks.add(bookName);
+            }
+        }
+
+        if(mostIssuedBooks.isEmpty()){
+            throw new NoBooksIssued("No book issued yet");
+        }
+        return mostIssuedBooks;
+    }
 }

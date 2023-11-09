@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,5 +34,15 @@ public class StudentService {
         result.setMobNo(student.getMobNo());
 
         return result;
+    }
+
+    public List<String> fetchAllStudents() {
+        List<Student> students = studentRepository.findAll();
+        List<String> studentNameList = new ArrayList<>();
+
+        for(Student student : students){
+            studentNameList.add(student.getStudentName());
+        }
+        return studentNameList;
     }
 }

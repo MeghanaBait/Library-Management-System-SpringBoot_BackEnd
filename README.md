@@ -41,3 +41,4 @@ This Library Management System enables students to easily check the availability
 - Spring Data Jpa (Hibernate)
 - MySQL
 - Maven
+- Swagger🔗(http://localhost:8080/swagger-ui/index.html>

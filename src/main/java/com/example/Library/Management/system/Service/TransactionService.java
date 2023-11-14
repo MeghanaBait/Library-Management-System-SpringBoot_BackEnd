@@ -84,12 +84,21 @@ public class TransactionService {
     }
 
 
-    public String returnBook(Integer bookId, Integer cardId){
+    public String returnBook(Integer bookId, Integer cardId) throws Exception {
 //        //bookId should be valid
 //        //card Id valid
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if(!optionalBook.isPresent()){
+            throw new BookNotFoundException("Invalid book ID");
+        }
 //
-        Book book = bookRepository.findById(bookId).get();
-        LibraryCard card = cardRepository.findById(cardId).get();
+        Book book = optionalBook.get();
+
+        Optional<LibraryCard> optionalLibraryCard = cardRepository.findById(cardId);
+        if (optionalLibraryCard.isPresent()){
+            throw new CardNotFoundException("Invalid Card ID");
+        }
+        LibraryCard card = optionalLibraryCard.get();
 
         Transaction transaction = transactionRepository.findTransactionByBookAndLibraryCardAndTransactionStatus(book, card, TransactionStatus.ISSUED);
 //issue date

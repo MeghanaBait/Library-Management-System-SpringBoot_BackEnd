@@ -25,7 +25,7 @@ public class Student {
     private String emailId;
     private String bloodGroup;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToOne(mappedBy = "studentVariable", cascade = CascadeType.ALL)
     private LibraryCard libraryCard;
     //in mappedby write variable name of foreign key column in child class

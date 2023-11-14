@@ -26,7 +26,11 @@ public class CardController {
 
     @PutMapping("/associate-with-student")
     public ResponseEntity associateWithStudent(@RequestParam("studentId") Integer studentId, @RequestParam("cardId") Integer cardNo){
-        String result = cardService.associateWithStudent(studentId,cardNo);
-        return new ResponseEntity(result,HttpStatus.OK);
+        try {
+            String result = cardService.associateWithStudent(studentId,cardNo);
+            return new ResponseEntity(result,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 }

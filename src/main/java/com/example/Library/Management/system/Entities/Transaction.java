@@ -32,14 +32,14 @@ public class Transaction {
     @UpdateTimestamp
     private Date lastModifiedOn;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn
     private Book book;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    //@JsonIgnore
     private LibraryCard libraryCard;
 
 

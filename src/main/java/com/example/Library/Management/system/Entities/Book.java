@@ -34,7 +34,7 @@ public class Book {
 //  unidirectional mapping
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+   // @JsonIgnore
     private Author author;
     // biderctional mapping:
 //    in parent table also child information is saved.

@@ -91,7 +91,7 @@ public class TransactionService {
         Book book = bookRepository.findById(bookId).get();
         LibraryCard card = cardRepository.findById(cardId).get();
 
-        Transaction transaction = (Transaction) transactionRepository.findTransactionByBookAndLibraryCardAndTransactionStatus(book, card, TransactionStatus.ISSUED);
+        Transaction transaction = transactionRepository.findTransactionByBookAndLibraryCardAndTransactionStatus(book, card, TransactionStatus.ISSUED);
 //issue date
         Date issueDate = transaction.getCreatedOn();
 
@@ -132,6 +132,9 @@ public class TransactionService {
         List<Transaction> transactionList = transactionRepository.findAll();
         Long revenue = 0L;
         for(Transaction transaction : transactionList){
+            if(transaction.getFine()==null){
+                continue;
+            }
             revenue += transaction.getFine();
         }
         return revenue;

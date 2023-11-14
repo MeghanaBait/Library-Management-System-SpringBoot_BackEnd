@@ -1,17 +1,18 @@
-package com.example.Library.Management.system.ResponseObject;
+package com.example.Library.Management.system.ResponseDTO;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BasicDetailsStudentResponse {
     private String name;
     private int age;
     private String mobNo;
+    private String email;
+    private String bloodGroup;
+    private Integer cardNo;
 }

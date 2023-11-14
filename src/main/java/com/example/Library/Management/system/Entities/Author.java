@@ -24,9 +24,9 @@ public class Author {
 
     private String authorName;
     private  int age;
-    private double rating;
+    private double rating = 0;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "author",cascade = CascadeType.ALL)
     private List<Book> bookList = new ArrayList<>();
 

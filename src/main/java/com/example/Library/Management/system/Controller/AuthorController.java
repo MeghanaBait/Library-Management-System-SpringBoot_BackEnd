@@ -46,7 +46,7 @@ public class AuthorController {
     @GetMapping("/avg-rating/{authorId}")
     public ResponseEntity getAverageRatingOfAllBookWrittenByAuthor(@PathVariable("authorId") Integer authorId){
         try {
-            Long rating = authorService.getAverageRatingOfAllBookWrittenByAuthor(authorId);
+            double rating = authorService.getAverageRatingOfAllBookWrittenByAuthor(authorId);
             return new ResponseEntity(rating, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

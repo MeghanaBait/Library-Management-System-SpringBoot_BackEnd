@@ -4,6 +4,8 @@ import com.example.Library.Management.system.Entities.Author;
 import com.example.Library.Management.system.Entities.Book;
 import com.example.Library.Management.system.Exceptions.AuthorNotFoundException;
 import com.example.Library.Management.system.Repository.AuthorRepository;
+import com.example.Library.Management.system.ResponseDTO.AuthorDetailsResponse;
+import com.example.Library.Management.system.Transformer.AuthorTransformer;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +35,14 @@ public class AuthorService {
     }
 
 
-    public Author getAuthorById(Integer id) throws Exception {
+    public AuthorDetailsResponse getAuthorById(Integer id) throws Exception {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
-        //author object can have value or there will be no value so the return type is optional
-        if(!optionalAuthor.isPresent()){
-            //throw an error
-            //top controller layer: try-catch
-            //bottom layer: use throws keyword to throw error to upper layer
+        if(optionalAuthor.isEmpty()){
             throw new Exception("The Id entered is invalid");
         }
         Author author = optionalAuthor.get();
-        return author;
+
+        return AuthorTransformer.convertEntityToResponse(author);
     }
 
     public List<String> getBookNamesList(Integer authorId){
@@ -59,7 +58,7 @@ public class AuthorService {
         return bookNames;
     }
 
-    public Long getAverageRatingOfAllBookWrittenByAuthor(Integer authorId) throws Exception {
+    public double getAverageRatingOfAllBookWrittenByAuthor(Integer authorId) throws Exception {
         Optional<Author> optionalAuthor = authorRepository.findById(authorId);
 
         if(!optionalAuthor.isPresent()){
@@ -69,12 +68,12 @@ public class AuthorService {
         Author author = optionalAuthor.get();
 
         List<Book> bookList = author.getBookList();
-        long totalRating = 0;
+        double totalRating = 0;
         for(Book book : bookList){
             totalRating += book.getRating();
         }
-
-        long avgRating = totalRating / bookList.size();
+        //#not getting long value
+        double avgRating = totalRating / bookList.size();
         return avgRating;
     }
 }

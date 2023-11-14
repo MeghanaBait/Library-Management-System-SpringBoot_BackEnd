@@ -1,8 +1,7 @@
 package com.example.Library.Management.system.Controller;
 
-import com.example.Library.Management.system.Entities.Book;
 import com.example.Library.Management.system.Entities.Student;
-import com.example.Library.Management.system.ResponseObject.BasicDetailsStudentResponse;
+import com.example.Library.Management.system.ResponseDTO.BasicDetailsStudentResponse;
 import com.example.Library.Management.system.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +27,12 @@ public class StudentController {
 
     @GetMapping("/getBasicDetails")
     public ResponseEntity getBasicDetails(@RequestParam("id") Integer id){
-        BasicDetailsStudentResponse resultObj = studentService.getBasicDetails(id);
-        return new ResponseEntity(resultObj,HttpStatus.OK);
+        try {
+            BasicDetailsStudentResponse resultObj = studentService.getBasicDetails(id);
+            return new ResponseEntity(resultObj,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/get-all-students")

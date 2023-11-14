@@ -26,13 +26,16 @@ public class BookService {
     public String addBook(Book book,Integer authorId) throws AuthorNotFoundException {
       //check whether author with authorID is present or not
         Optional<Author> optionalAuthor = authorRepository.findById(authorId);
-        if (!optionalAuthor.isPresent()){
+        if (optionalAuthor.isEmpty()){
             throw new AuthorNotFoundException("Author id entered is invalid");
         }
         Author author = optionalAuthor.get();
         book.setAvailable(true);
         book.setAuthor(author);
         //its bidirectional mapping , author should also have the information of book entity;
+        //set author rating
+        Double rating = ((author.getRating() *author.getBookList().size())+ book.getRating())/(author.getBookList().size()+1);
+
         author.getBookList().add(book);
 
         authorRepository.save(author);

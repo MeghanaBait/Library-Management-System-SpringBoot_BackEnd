@@ -31,11 +31,11 @@ public class LibraryCard {
 
     @OneToOne
     @JoinColumn
-    @JsonIgnore
+    //@JsonIgnore
     private Student studentVariable;//acts as foreign key for library card table
     //this variable is to be put in mapped by attribute in the parent class
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "libraryCard", cascade = CascadeType.ALL)
     private List<Transaction> transactionList = new ArrayList<>();
 }
